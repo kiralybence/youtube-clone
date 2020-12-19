@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::resource('video', App\Http\Controllers\VideoController::class)->only(['show', 'create', 'store']);
