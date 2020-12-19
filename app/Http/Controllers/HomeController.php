@@ -10,7 +10,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('home');
+        $videos = Video::with('user')->orderByDesc('created_at')->limit(8)->get();
+
+        return view('home', [
+            'videos' => $videos,
+        ]);
     }
 
     public function search(Request $request)
@@ -20,7 +24,7 @@ class HomeController extends Controller
             return back();
         }
 
-        $videos = Video::where('title', 'LIKE', '%'.$request->q.'%')->limit(6)->get();
+        $videos = Video::with('user')->where('title', 'LIKE', '%'.$request->q.'%')->limit(6)->get();
         $users = User::where('name', 'LIKE', '%'.$request->q.'%')->limit(6)->get();
 
         return view('search', [

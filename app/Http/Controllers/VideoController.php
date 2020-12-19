@@ -88,6 +88,7 @@ class VideoController extends Controller
 
         // Grab some other videos to recommend
         $recommendedVideos = $video->user->videos()
+            ->with('user')
             ->where('id', '<>', $video->id)
             ->orderByDesc('created_at')
             ->take(6)
