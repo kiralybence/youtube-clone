@@ -20,7 +20,8 @@ class Video extends Model
     ];
 
     protected $appends = [
-        'viewCount'
+        'viewCount',
+        'thumbnailUrl',
     ];
 
     public function user()
@@ -67,5 +68,10 @@ class Video extends Model
         return DB::table('views')
             ->where('video_id', $this->id)
             ->count();
+    }
+
+    public function getThumbnailUrlAttribute()
+    {
+        return asset('/storage/thumbnails/'.$this->unique_key).'.jpg';
     }
 }

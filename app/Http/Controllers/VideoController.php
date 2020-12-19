@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
+use FFMpeg\FFMpeg;
+use FFMpeg\Coordinate\TimeCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class VideoController extends Controller
 {
@@ -31,6 +34,31 @@ class VideoController extends Controller
 
         // Save the video
         $request->video->storeAs('videos', $filename, 'public');
+
+        // Initialize ffmpeg
+        $ffmpeg = FFMpeg::create(array(
+            'ffmpeg.binaries'  => env('FFMPEG_PATH'),
+            'ffprobe.binaries' => env('FFPROBE_PATH'),
+            'timeout'          => 3600, // The timeout for the underlying process
+            'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+        ));
+
+        // If thumbnails directory doesn't exist, create it
+        // This is only needed because ffmpeg cannot save to a non-existing directory
+        if (!file_exists(storage_path('app/public').'/thumbnails/')) {
+            mkdir(storage_path('app/public').'/thumbnails/');
+        }
+
+        // Generate a thumbnail
+        $ffmpeg
+            ->open(storage_path('app/public').'/videos/'.$filename)
+            ->frame(TimeCode::fromSeconds(0))
+            ->save(storage_path('app/public').'/thumbnails/'.$uniqueKey.'.jpg');
+
+        // Optimize the thumbnail
+        Image::make(storage_path('app/public').'/thumbnails/'.$uniqueKey.'.jpg')
+            ->fit(1280, 720)
+            ->save(storage_path('app/public').'/thumbnails/'.$uniqueKey.'.jpg', 50, 'jpg');
 
         // Save the video entry to the database
         auth()->user()->videos()->create([
@@ -59,7 +87,11 @@ class VideoController extends Controller
         $video->incrementViewCount();
 
         // Grab some other videos to recommend
-        $recommendedVideos = $video->user->videos()->take(6)->get();
+        $recommendedVideos = $video->user->videos()
+            ->where('id', '<>', $video->id)
+            ->orderByDesc('created_at')
+            ->take(6)
+            ->get();
 
         return view('video.show', [
             'video' => $video,

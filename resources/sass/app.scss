@@ -7,14 +7,14 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-#video-player-container {
+.video-player-container {
     position: relative;
     width: 100%;
     padding-top: 56.25%;
     background-color: black;
 }
 
-#video-player-container video {
+.video-player-container video {
     position: absolute;
     top: 0;
     left: 0;
@@ -22,11 +22,22 @@
     height: 100%;
 }
 
-#video-title {
+.video-title {
     font-size: 24px;
 }
 
-#video-info {
+.video-info {
     font-size: 14px;
     color: grey;
+}
+
+.video-thumbnail-info {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.video-thumbnail-info a {
+    color: initial;
+    text-decoration: none;
 }
