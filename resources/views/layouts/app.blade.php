@@ -34,12 +34,23 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('video.create') }}">Upload</a>
+                            <form method="GET" action="{{ route('search') }}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="q" placeholder="Search">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-secondary" type="submit">🔍︎</button>
+                                    </div>
+                                </div>
+                            </form>
                         </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('video.create') }}">Upload</a>
+                        </li>
+
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
