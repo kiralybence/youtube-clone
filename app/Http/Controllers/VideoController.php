@@ -58,8 +58,12 @@ class VideoController extends Controller
         // Increment the video's viewcount
         $video->incrementViewCount();
 
+        // Grab some other videos to recommend
+        $recommendedVideos = $video->user->videos()->take(6)->get();
+
         return view('video.show', [
             'video' => $video,
+            'recommendedVideos' => $recommendedVideos,
         ]);
     }
 }
