@@ -42,4 +42,8 @@ class CommentController extends Controller
 
         $comment->save();
     }
+
+    public function rate(Request $request, Comment $comment) {
+        // TODO
+    }
 }

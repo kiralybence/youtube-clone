@@ -1,41 +1,148 @@
 <template>
+    <!-- Comment section container -->
     <div>
+        <!-- Comment counter -->
         <h2 class="h5 mb-3">{{ comments.length }} comments</h2>
+
+        <!-- New comment -->
         <div class="mb-4">
-            <textarea class="form-control mb-2 shadow-sm" v-model="newCommentDraft"></textarea>
-            <button class="btn btn-primary" v-on:click="sendComment()">Send</button>
+            <!-- Input field -->
+            <textarea
+                class="form-control mb-2 shadow-sm"
+                v-model="newCommentDraft"
+            ></textarea>
+
+            <!-- Send button -->
+            <button
+                class="btn btn-primary"
+                v-on:click="sendComment()"
+            >
+                Send
+            </button>
         </div>
 
+        <!-- Comment section placeholder -->
         <p v-show="comments.length === 0">
             Cold is the void...
         </p>
 
-        <div v-for="comment in comments" class="comment-box">
-            <b>{{ comment.user.name }}</b> <span class="comment-date">{{ comment.date.toLocaleString() }}</span>
-            <p class="comment-content">{{ comment.content }}</p>
+        <!-- Comments -->
+        <div
+            v-for="comment in comments"
+            class="comment-box"
+        >
+            <!-- Comment username -->
+            <b>{{ comment.user.name }}</b>
 
+            <!-- Comment date -->
+            <span class="comment-date">
+                {{ comment.date.toLocaleString() }}
+            </span>
+
+            <!-- Comment content -->
+            <p class="comment-content">
+                {{ comment.content }}
+            </p>
+
+            <!-- Buttons -->
             <div>
-                <span class="comment-upvote"><i class="fas fa-thumbs-up"></i></span>
-                <span class="comment-points">{{ Math.floor(Math.random() * 20) }}</span>
-                <span class="comment-downvote"><i class="fas fa-thumbs-down"></i></span>
-                <button class="btn btn-primary btn-sm ml-3" v-on:click="comment.reply.isOpen = true" v-show="!comment.reply.isOpen">Reply</button>
+                <!-- Upvote button -->
+                <span
+                    class="comment-upvote"
+                    v-bind:class="{ 'comment-upvote-active': comment.rateStatus === 'upvoted' }"
+                    v-on:click="rateComment(comment, 'upvote')"
+                >
+                    <i class="fas fa-thumbs-up"></i>
+                </span>
+
+                <!-- Comment points -->
+                <span class="comment-points">
+                    {{ Math.floor(Math.random() * 20) }}
+                </span>
+
+                <!-- Downvote button -->
+                <span
+                    class="comment-downvote"
+                    v-bind:class="{ 'comment-downvote-active': comment.rateStatus === 'downvoted' }"
+                    v-on:click="rateComment(comment, 'downvote')"
+                >
+                    <i class="fas fa-thumbs-down"></i>
+                </span>
+
+                <!-- Reply button -->
+                <button
+                    class="btn btn-primary btn-sm ml-3"
+                    v-on:click="comment.reply.isOpen = true"
+                    v-show="!comment.reply.isOpen"
+                >
+                    Reply
+                </button>
             </div>
 
+            <!-- New reply -->
             <div class="mt-4" v-show="comment.reply.isOpen">
-                <textarea class="form-control mb-2 shadow-sm" v-model="comment.reply.draft"></textarea>
-                <button class="btn btn-primary" v-on:click="sendComment(comment)">Send</button>
-                <button class="btn btn-secondary" v-on:click="comment.reply.isOpen = false">Cancel</button>
+                <!-- Input field -->
+                <textarea
+                    class="form-control mb-2 shadow-sm"
+                    v-model="comment.reply.draft"
+                ></textarea>
+
+                <!-- Send button -->
+                <button
+                    class="btn btn-primary"
+                    v-on:click="sendComment(comment)"
+                >
+                    Send
+                </button>
+
+                <!-- Cancel button -->
+                <button
+                    class="btn btn-secondary"
+                    v-on:click="comment.reply.isOpen = false"
+                >
+                    Cancel
+                </button>
             </div>
 
-            <div class="mt-4" v-show="comment.children.length > 0">
-                <div v-for="child in comment.children" class="comment-box">
-                    <b>{{ child.user.name }}</b> <span class="comment-date">{{ comment.date.toLocaleString() }}</span>
-                    <p class="comment-content">{{ child.content }}</p>
+            <!-- Replies (container) -->
+            <div
+                class="mt-4"
+                v-show="comment.children.length > 0"
+            >
+                <!-- Reply -->
+                <div
+                    v-for="child in comment.children"
+                    class="comment-box"
+                >
+                    <!-- Reply username -->
+                    <b>{{ child.user.name }}</b>
 
+                    <!-- Reply date -->
+                    <span class="comment-date">
+                        {{ comment.date.toLocaleString() }}
+                    </span>
+
+                    <!-- Reply content -->
+                    <p class="comment-content">
+                        {{ child.content }}
+                    </p>
+
+                    <!-- Buttons -->
                     <div>
-                        <span class="comment-upvote"><i class="fas fa-thumbs-up"></i></span>
-                        <span class="comment-points">{{ Math.floor(Math.random() * 20) }}</span>
-                        <span class="comment-downvote"><i class="fas fa-thumbs-down"></i></span>
+                        <!-- Upvote button -->
+                        <span class="comment-upvote">
+                            <i class="fas fa-thumbs-up"></i>
+                        </span>
+
+                        <!-- Reply points -->
+                        <span class="comment-points">
+                            {{ Math.floor(Math.random() * 20) }}
+                        </span>
+
+                        <!-- Downvote button -->
+                        <span class="comment-downvote">
+                            <i class="fas fa-thumbs-down"></i>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -71,6 +178,7 @@
                                 id: comment.id,
                                 content: comment.content,
                                 date: new Date(comment.created_at),
+                                rateStatus: 'neutral', // TODO
                                 user: comment.user,
                                 children: comment.comments,
                                 // TODO: don't reset drafts on load
@@ -114,6 +222,15 @@
                     }
                 } catch (err) {
                     console.error(err);
+                }
+            },
+            async rateComment(comment, rateType = 'neutral') {
+                const response = await axios.post(`/api/comments/${comment.id}/rate`, {
+                    rating: rateType,
+                });
+
+                if (response.status === 200) {
+                    await this.loadComments();
                 }
             },
         },
