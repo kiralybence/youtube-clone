@@ -11,7 +11,7 @@
         </p>
 
         <div v-for="comment in comments" class="comment-box">
-            <b>{{ comment.user.name }}</b>
+            <b>{{ comment.user.name }}</b> <span class="comment-date">{{ comment.date.toLocaleString() }}</span>
             <p class="comment-content">{{ comment.content }}</p>
 
             <div>
@@ -28,7 +28,7 @@
 
             <div class="mt-4" v-show="comment.children.length > 0">
                 <div v-for="child in comment.children" class="comment-box">
-                    <b>{{ child.user.name }}</b>
+                    <b>{{ child.user.name }}</b> <span class="comment-date">{{ comment.date.toLocaleString() }}</span>
                     <p class="comment-content">{{ child.content }}</p>
 
                     <div>
@@ -68,6 +68,7 @@
                             this.comments.push({
                                 id: comment.id,
                                 content: comment.content,
+                                date: new Date(comment.created_at),
                                 user: comment.user,
                                 children: comment.comments,
                                 // TODO: don't reset drafts on load
