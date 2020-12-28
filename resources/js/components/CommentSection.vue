@@ -16,6 +16,7 @@
 
             <div>
                 <button class="btn btn-primary btn-sm">👍</button>
+                <span class="comment-points">{{ Math.floor(Math.random() * 20) }}</span>
                 <button class="btn btn-danger btn-sm">👎</button>
                 <button class="btn btn-primary btn-sm" v-on:click="comment.reply.isOpen = true" v-show="!comment.reply.isOpen">Reply</button>
             </div>
@@ -33,6 +34,7 @@
 
                     <div>
                         <button class="btn btn-primary btn-sm">👍</button>
+                        <span class="comment-points">{{ Math.floor(Math.random() * 20) }}</span>
                         <button class="btn btn-danger btn-sm">👎</button>
                     </div>
                 </div>
