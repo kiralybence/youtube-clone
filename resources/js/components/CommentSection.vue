@@ -2,7 +2,7 @@
     <!-- Comment section container -->
     <div>
         <!-- Comment counter -->
-        <h2 class="h5 mb-3">{{ comments.length }} comments</h2>
+        <h2 class="h5 mb-3">{{ countComments() }} comments</h2>
 
         <!-- New comment -->
         <div class="mb-4">
@@ -107,15 +107,15 @@
             <!-- Replies (container) -->
             <div
                 class="mt-4"
-                v-show="comment.children.length > 0"
+                v-show="comment.replies.length > 0"
             >
                 <!-- Reply -->
                 <div
-                    v-for="child in comment.children"
+                    v-for="reply in comment.replies"
                     class="comment-box"
                 >
                     <!-- Reply username -->
-                    <b>{{ child.user.name }}</b>
+                    <b>{{ reply.user.name }}</b>
 
                     <!-- Reply date -->
                     <span class="comment-date">
@@ -124,7 +124,7 @@
 
                     <!-- Reply content -->
                     <p class="comment-content">
-                        {{ child.content }}
+                        {{ reply.content }}
                     </p>
 
                     <!-- Buttons -->
@@ -180,7 +180,7 @@
                                 date: new Date(comment.created_at),
                                 rateStatus: 'neutral', // TODO
                                 user: comment.user,
-                                children: comment.comments,
+                                replies: comment.comments,
                                 // TODO: don't reset drafts on load
                                 reply: {
                                     isOpen: false,
@@ -225,13 +225,26 @@
                 }
             },
             async rateComment(comment, rateType = 'neutral') {
-                const response = await axios.post(`/api/comments/${comment.id}/rate`, {
-                    rating: rateType,
+                try {
+                    const response = await axios.post(`/api/comments/${comment.id}/rate`, {
+                        rating: rateType,
+                    });
+
+                    if (response.status === 200) {
+                        await this.loadComments();
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            },
+            countComments() {
+                let count = this.comments.length;
+
+                this.comments.forEach(comment => {
+                    count += comment.replies.length;
                 });
 
-                if (response.status === 200) {
-                    await this.loadComments();
-                }
+                return count;
             },
         },
     };
