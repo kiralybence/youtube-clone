@@ -9,8 +9,8 @@ It includes features such as:
     - Custom thumbnails (TODO)
     - Public/Unlisted/Private visibility (TODO)
 - Search
-- View count (with a little bit of spam detection)
-- Comments (TODO)
+- View count
+- Comments
 - Like/Dislike (TODO)
 - Subscribing (TODO)
 

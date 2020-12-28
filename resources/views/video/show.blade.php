@@ -15,14 +15,15 @@
                 <hr>
                 <b>{{ $video->user->name }}</b>
                 <p>{{ $video->description }}</p>
+                <hr>
+                <comment-section video-key="{{ $video->unique_key }}"></comment-section>
             </div>
             <div class="col-md-4">
-                <h2 class="h4 mb-3">Other videos</h2>
                 @foreach($recommendedVideos as $recommendedVideo)
                     <div class="row mb-3">
                         <div class="col-6">
                             <a href="{{ route('video.show', ['video' => $recommendedVideo->unique_key]) }}">
-                                <img src="{{ $recommendedVideo->thumbnailUrl }}" class="w-100">
+                                <img src="{{ $recommendedVideo->thumbnailUrl }}" class="w-100" alt="{{ $recommendedVideo->title }}">
                             </a>
                         </div>
                         <div class="col-6 p-0 video-thumbnail-info">

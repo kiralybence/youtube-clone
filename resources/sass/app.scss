@@ -41,3 +41,26 @@
     color: initial;
     text-decoration: none;
 }
+
+.comment-box {
+    border: 1px solid grey;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: lightgrey 2px 2px 5px;
+}
+
+.comment-box .comment-box {
+    background-color: #f8fafc;
+    margin-bottom: 15px;
+}
+
+.comment-box .comment-box:last-child {
+    margin-bottom: 5px;
+}
+
+.comment-content {
+    word-wrap: break-word;
+    margin-top: 10px;
+}
