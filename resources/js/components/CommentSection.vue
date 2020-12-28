@@ -15,10 +15,10 @@
             <p class="comment-content">{{ comment.content }}</p>
 
             <div>
-                <button class="btn btn-primary btn-sm">👍</button>
+                <span class="comment-upvote"><i class="fas fa-thumbs-up"></i></span>
                 <span class="comment-points">{{ Math.floor(Math.random() * 20) }}</span>
-                <button class="btn btn-danger btn-sm">👎</button>
-                <button class="btn btn-primary btn-sm" v-on:click="comment.reply.isOpen = true" v-show="!comment.reply.isOpen">Reply</button>
+                <span class="comment-downvote"><i class="fas fa-thumbs-down"></i></span>
+                <button class="btn btn-primary btn-sm ml-3" v-on:click="comment.reply.isOpen = true" v-show="!comment.reply.isOpen">Reply</button>
             </div>
 
             <div class="mt-4" v-show="comment.reply.isOpen">
@@ -33,9 +33,9 @@
                     <p class="comment-content">{{ child.content }}</p>
 
                     <div>
-                        <button class="btn btn-primary btn-sm">👍</button>
+                        <span class="comment-upvote"><i class="fas fa-thumbs-up"></i></span>
                         <span class="comment-points">{{ Math.floor(Math.random() * 20) }}</span>
-                        <button class="btn btn-danger btn-sm">👎</button>
+                        <span class="comment-downvote"><i class="fas fa-thumbs-down"></i></span>
                     </div>
                 </div>
             </div>

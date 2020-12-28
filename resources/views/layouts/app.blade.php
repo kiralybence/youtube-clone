@@ -38,7 +38,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="q" placeholder="Search">
                                     <div class="input-group-append">
-                                        <button class="btn btn-secondary" type="submit">🔍︎</button>
+                                        <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
                                     </div>
                                 </div>
                             </form>
