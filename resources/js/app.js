@@ -41,7 +41,7 @@ $('.quality-setter').on('click', function() {
     // Restore the previous timestamp
     video.currentTime = currentTime;
 
-    // Restore play/pause
+    // Restore play/pause state
     if (paused) {
         video.pause();
     } else {
