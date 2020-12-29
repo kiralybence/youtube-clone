@@ -90,7 +90,7 @@ class Video extends Model
         $validator = Validator::make($request->all(), [
             'title' => ['required', 'max:255'],
             'description' => ['nullable', 'max:65535'],
-            'video' => ['required', 'mimetypes:video/mp4,video/webm'],
+            'video' => ['required', 'mimetypes:video/mp4'],
         ]);
 
         return $validator;
@@ -207,9 +207,6 @@ class Video extends Model
             'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
         ));
 
-        // Initialize codec
-        $codec = new X264('libmp3lame', 'libx264');
-
         // If thumbnails directory doesn't exist, create it
         // This is only needed because ffmpeg cannot save to a non-existing directory
         if (!file_exists($this->thumbnailStorageDirPath)) {
@@ -218,6 +215,9 @@ class Video extends Model
 
         // Open video with ffmpeg
         $processed = $ffmpeg->open($this->videoStoragePaths['source']);
+
+        // Initialize codec
+        $codec = new X264('libmp3lame', 'libx264');
 
         // Generate a thumbnail
         $processed

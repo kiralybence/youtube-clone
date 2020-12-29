@@ -65,7 +65,7 @@
                                 <small
                                     id="video-help"
                                     class="form-text text-muted"
-                                >Supported file formats: mp4, webm</small>
+                                >Supported file formats: mp4</small>
                             </div>
 
                             {{-- TODO: custom thumbnail --}}
