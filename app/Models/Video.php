@@ -128,7 +128,9 @@ class Video extends Model
 
     public function getThumbnailUrlAttribute()
     {
-        return asset('/storage/thumbnails/'.$this->unique_key).'.jpg';
+        return file_exists($this->thumbnailStoragePath)
+            ? asset('/storage/thumbnails/'.$this->unique_key).'.jpg'
+            : ''; // TODO: placeholder thumbnail
     }
 
     public function getVideoUrlsAttribute()

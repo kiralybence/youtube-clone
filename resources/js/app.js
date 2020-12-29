@@ -16,6 +16,16 @@ const app = new Vue({
 
 // Set video quality
 $('.quality-setter').on('click', function() {
+    // Reset all buttons
+    $('.quality-setter').removeClass('font-weight-bold');
+    $('.quality-setter').removeClass('btn-dark');
+    $('.quality-setter').addClass('btn-secondary');
+
+    // Highlight currently selected button
+    $(this).removeClass('btn-secondary');
+    $(this).addClass('btn-dark');
+    $(this).addClass('font-weight-bold');
+
     const url = $(this).data('url');
     const video = document.querySelector('#video-main');
     const source = document.querySelector('#video-main source');

@@ -14,7 +14,10 @@
                 <div class="video-info">{{ $video->viewCount }} views <b>&middot;</b> {{ $video->created_at->format('F d, Y') }}</div>
                 <div class="mt-2">
                     @foreach($video->videoUrls as $res => $url)
-                    <button class="btn btn-secondary btn-sm quality-setter" data-url="{{ $url }}">
+                    <button
+                        class="btn @if($res === 'source') btn-dark font-weight-bold @else btn-secondary @endif btn-sm quality-setter"
+                        data-url="{{ $url }}"
+                    >
                         @if($res === 'source')
                             Source ({{ $video->source_res ?? 'unknown' }})
                         @else
