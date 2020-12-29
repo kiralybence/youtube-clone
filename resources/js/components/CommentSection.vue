@@ -49,22 +49,22 @@
                 <!-- Upvote button -->
                 <span
                     class="comment-upvote"
-                    v-bind:class="{ 'comment-upvote-active': comment.rateStatus === 'upvoted' }"
-                    v-on:click="rateComment(comment, 'upvote')"
+                    v-bind:class="{ 'comment-upvote-active': comment.rateStatus === 'upvote' }"
+                    v-on:click="rateComment(comment, comment.rateStatus !== 'upvote' ? 'upvote' : 'neutral')"
                 >
                     <i class="fas fa-thumbs-up"></i>
                 </span>
 
                 <!-- Comment points -->
                 <span class="comment-points">
-                    {{ Math.floor(Math.random() * 20) }}
+                    {{ comment.points }}
                 </span>
 
                 <!-- Downvote button -->
                 <span
                     class="comment-downvote"
-                    v-bind:class="{ 'comment-downvote-active': comment.rateStatus === 'downvoted' }"
-                    v-on:click="rateComment(comment, 'downvote')"
+                    v-bind:class="{ 'comment-downvote-active': comment.rateStatus === 'downvote' }"
+                    v-on:click="rateComment(comment, comment.rateStatus !== 'downvote' ? 'downvote' : 'neutral')"
                 >
                     <i class="fas fa-thumbs-down"></i>
                 </span>
@@ -130,17 +130,25 @@
                     <!-- Buttons -->
                     <div>
                         <!-- Upvote button -->
-                        <span class="comment-upvote">
+                        <span
+                            class="comment-upvote"
+                            v-bind:class="{ 'comment-upvote-active': reply.rateStatus === 'upvote' }"
+                            v-on:click="rateComment(reply, reply.rateStatus !== 'upvote' ? 'upvote' : 'neutral')"
+                        >
                             <i class="fas fa-thumbs-up"></i>
                         </span>
 
-                        <!-- Reply points -->
+                        <!-- Comment points -->
                         <span class="comment-points">
-                            {{ Math.floor(Math.random() * 20) }}
+                            {{ reply.points }}
                         </span>
 
                         <!-- Downvote button -->
-                        <span class="comment-downvote">
+                        <span
+                            class="comment-downvote"
+                            v-bind:class="{ 'comment-downvote-active': reply.rateStatus === 'downvote' }"
+                            v-on:click="rateComment(reply, reply.rateStatus !== 'downvote' ? 'downvote' : 'neutral')"
+                        >
                             <i class="fas fa-thumbs-down"></i>
                         </span>
                     </div>
@@ -174,19 +182,7 @@
 
                         this.comments = [];
                         response.data.forEach(comment => {
-                            this.comments.push({
-                                id: comment.id,
-                                content: comment.content,
-                                date: new Date(comment.created_at),
-                                rateStatus: 'neutral', // TODO
-                                user: comment.user,
-                                replies: comment.comments,
-                                // TODO: don't reset drafts on load
-                                reply: {
-                                    isOpen: false,
-                                    draft: '',
-                                }
-                            });
+                            this.comments.push(this.createCommentFromResponse(comment));
                         });
                     }
                 } catch (err) {
@@ -196,8 +192,9 @@
             async sendComment(parent = null) {
                 try {
                     let data;
+                    const isReply = parent !== null;
 
-                    if (parent === null) {
+                    if (!isReply) {
                         data = {
                             content: this.newCommentDraft,
                         };
@@ -210,12 +207,14 @@
 
                     const response = await axios.post(`/api/video/${this.videoKey}/comments`, data);
 
-                    if (response.status === 200) {
-                        await this.loadComments();
+                    if (response.status === 201) {
+                        if (!isReply) {
+                            this.comments.unshift(this.createCommentFromResponse(response.data));
 
-                        if (parent === null) {
                             this.newCommentDraft = '';
                         } else {
+                            parent.replies.push(response.data);
+
                             parent.reply.isOpen = false;
                             parent.reply.draft = '';
                         }
@@ -227,11 +226,40 @@
             async rateComment(comment, rateType = 'neutral') {
                 try {
                     const response = await axios.post(`/api/comments/${comment.id}/rate`, {
-                        rating: rateType,
+                        rateType: rateType,
                     });
 
-                    if (response.status === 200) {
-                        await this.loadComments();
+                    if (response.status === 200 || true) {
+                        // Set the comment to neutral first
+                        switch (comment.rateStatus) {
+                            case 'upvote':
+                                comment.points--;
+                                break;
+
+                            case 'downvote':
+                                comment.points++;
+                                break;
+
+                            default:
+                                break;
+                        }
+                        comment.rateStatus = 'neutral';
+
+                        // And then apply the new rating
+                        switch (rateType) {
+                            case 'upvote':
+                                comment.rateStatus = 'upvote';
+                                comment.points++;
+                                break;
+
+                            case 'downvote':
+                                comment.rateStatus = 'downvote';
+                                comment.points--;
+                                break;
+
+                            default:
+                                break;
+                        }
                     }
                 } catch (err) {
                     console.error(err);
@@ -245,6 +273,30 @@
                 });
 
                 return count;
+            },
+            createCommentFromResponse(comment) {
+                return {
+                    id: comment.id,
+                    content: comment.content,
+                    date: new Date(comment.created_at),
+                    points: comment.points,
+                    rateStatus: comment.authUserRating,
+                    user: comment.user,
+                    replies: comment.comments.map(reply => {
+                        return {
+                            id: reply.id,
+                            content: reply.content,
+                            date: new Date(reply.created_at),
+                            points: reply.points,
+                            rateStatus: reply.authUserRating,
+                            user: reply.user,
+                        };
+                    }),
+                    reply: {
+                        isOpen: false,
+                        draft: '',
+                    },
+                };
             },
         },
     };

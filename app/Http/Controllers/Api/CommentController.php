@@ -19,7 +19,7 @@ class CommentController extends Controller
             ->get();
 
         // TODO: don't send unnecessary information
-        return $comments;
+        return response()->json($comments);
     }
 
     public function store(Request $request, $videoKey)
@@ -41,9 +41,15 @@ class CommentController extends Controller
         }
 
         $comment->save();
+
+        $comment->comments;
+
+        return response()->json($comment, 201);
     }
 
     public function rate(Request $request, Comment $comment) {
-        // TODO
+        // TODO: validate
+
+        $comment->rate($request->rateType);
     }
 }
