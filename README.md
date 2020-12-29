@@ -9,6 +9,7 @@ It includes features such as:
     - Multiple quality options
     - Custom thumbnails (TODO)
     - Public/Unlisted/Private visibility (TODO)
+    - Preview GIF (TODO)
 - Search
 - View count
 - Comments
