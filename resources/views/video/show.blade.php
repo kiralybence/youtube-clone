@@ -5,13 +5,24 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="video-player-container mb-3">
-                    <video controls autoplay>
-                        <source src="{{ asset('/storage/videos/'.$video->filename) }}">
+                    <video controls autoplay id="video-main">
+                        <source src="{{ $video->videoUrls['source'] }}">
                     </video>
                 </div>
 
                 <h1 class="video-title">{{ $video->title }}</h1>
                 <div class="video-info">{{ $video->viewCount }} views <b>&middot;</b> {{ $video->created_at->format('F d, Y') }}</div>
+                <div class="mt-2">
+                    @foreach($video->videoUrls as $res => $url)
+                    <button class="btn btn-secondary btn-sm quality-setter" data-url="{{ $url }}">
+                        @if($res === 'source')
+                            Source ({{ $video->source_res ?? 'unknown' }})
+                        @else
+                            {{ $res }}p
+                        @endif
+                    </button>
+                    @endforeach
+                </div>
                 <hr>
                 <b>{{ $video->user->name }}</b>
                 <p>{{ $video->description }}</p>

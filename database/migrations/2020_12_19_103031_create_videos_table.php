@@ -19,8 +19,10 @@ class CreateVideosTable extends Migration
             $table->text('description')->nullable();
             $table->char('unique_key', 16)->unique();
             $table->string('filename');
+            $table->string('source_res')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+            $table->timestamp('processed_at')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
         });
