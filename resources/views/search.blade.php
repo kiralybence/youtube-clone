@@ -11,9 +11,15 @@
                     <h2 class="mb-4">Videos</h2>
                     @forelse($videos as $video)
                         <div class="row mb-3">
-                            <div class="col-6">
+                            <div class="col-6 video-thumbnail-container">
                                 <a href="{{ route('video.show', ['video' => $video->unique_key]) }}">
-                                    <img src="{{ $video->thumbnailUrl }}" class="w-100">
+                                    <img
+                                        src="{{ $video->thumbnailUrl }}"
+                                        class="video-thumbnail-img video-thumbnail-img-lg"
+                                        alt="{{ $video->title }}"
+                                        data-thumbnail-url="{{ $video->thumbnailUrl }}"
+                                        data-preview-url="{{ $video->previewUrl }}"
+                                    >
                                 </a>
                             </div>
                             <div class="col-6 p-0 video-thumbnail-info">

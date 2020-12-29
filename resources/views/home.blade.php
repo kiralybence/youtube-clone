@@ -5,9 +5,17 @@
     <div class="row">
         @foreach($videos as $video)
         <div class="col-md-3 mb-5">
-            <a href="{{ route('video.show', ['video' => $video->unique_key]) }}">
-                <img src="{{ $video->thumbnailUrl }}" class="w-100 mb-1">
-            </a>
+            <div class="video-thumbnail-container">
+                <a href="{{ route('video.show', ['video' => $video->unique_key]) }}">
+                    <img
+                        src="{{ $video->thumbnailUrl }}"
+                        class="video-thumbnail-img video-thumbnail-img-md mb-1"
+                        alt="{{ $video->title }}"
+                        data-thumbnail-url="{{ $video->thumbnailUrl }}"
+                        data-preview-url="{{ $video->previewUrl }}"
+                    >
+                </a>
+            </div>
             <div class="video-thumbnail-info">
                 <a href="{{ route('video.show', ['video' => $video->unique_key]) }}">
                     <b>{{ $video->title }}</b><br>
