@@ -35,9 +35,15 @@
             <div class="col-md-4">
                 @foreach($recommendedVideos as $recommendedVideo)
                     <div class="row mb-3">
-                        <div class="col-6">
+                        <div class="col-6 video-thumbnail-container">
                             <a href="{{ route('video.show', ['video' => $recommendedVideo->unique_key]) }}">
-                                <img src="{{ $recommendedVideo->thumbnailUrl }}" class="w-100" alt="{{ $recommendedVideo->title }}">
+                                <img
+                                    src="{{ $recommendedVideo->thumbnailUrl }}"
+                                    class="video-thumbnail-img video-thumbnail-img-sm"
+                                    alt="{{ $recommendedVideo->title }}"
+                                    data-thumbnail-url="{{ $recommendedVideo->thumbnailUrl }}"
+                                    data-preview-url="{{ $recommendedVideo->previewUrl }}"
+                                >
                             </a>
                         </div>
                         <div class="col-6 p-0 video-thumbnail-info">

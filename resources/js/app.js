@@ -48,3 +48,13 @@ $('.quality-setter').on('click', function() {
         video.play();
     }
 });
+
+// Preview on hover
+$('.video-thumbnail-img').on('mouseover', function() {
+    const previewUrl = $(this).data('preview-url');
+    $(this).attr('src', previewUrl);
+});
+$('.video-thumbnail-img').on('mouseleave', function() {
+    const thumbnailUrl = $(this).data('thumbnail-url');
+    $(this).attr('src', thumbnailUrl);
+});

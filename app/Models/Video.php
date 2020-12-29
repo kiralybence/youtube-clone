@@ -28,12 +28,21 @@ class Video extends Model
 
     protected $appends = [
         'viewCount',
+
+        // URL
         'thumbnailUrl',
         'videoUrls',
+        'previewUrl',
+
+        // Dir path
         'videoStorageDirPath',
         'thumbnailStorageDirPath',
+        'previewStorageDirPath',
+
+        // File path
         'videoStoragePaths',
         'thumbnailStoragePath',
+        'previewStoragePath',
     ];
 
     const RESOLUTIONS = [
@@ -129,8 +138,8 @@ class Video extends Model
     public function getThumbnailUrlAttribute()
     {
         return file_exists($this->thumbnailStoragePath)
-            ? asset('/storage/thumbnails/'.$this->unique_key).'.jpg'
-            : ''; // TODO: placeholder thumbnail
+            ? asset('/storage/thumbnails/'.$this->unique_key.'.jpg')
+            : NULL; // TODO: placeholder thumbnail
     }
 
     public function getVideoUrlsAttribute()
@@ -165,6 +174,11 @@ class Video extends Model
         return storage_path('app/public').'/thumbnails/';
     }
 
+    public function getPreviewStorageDirPathAttribute()
+    {
+        return storage_path('app/public').'/previews/';
+    }
+
     public function getVideoStoragePathsAttribute()
     {
         $paths = [];
@@ -190,6 +204,18 @@ class Video extends Model
     public function getThumbnailStoragePathAttribute()
     {
         return $this->thumbnailStorageDirPath.$this->unique_key.'.jpg';
+    }
+
+    public function getPreviewStoragePathAttribute()
+    {
+        return $this->previewStorageDirPath.$this->unique_key.'.gif';
+    }
+
+    public function getPreviewUrlAttribute()
+    {
+        return file_exists($this->previewStoragePath)
+            ? asset('/storage/previews/'.$this->unique_key.'.gif')
+            : NULL;
     }
 
     public function process()
@@ -257,6 +283,18 @@ class Video extends Model
                     ->save($codec, $this->videoStorageDirPath . $height . '_' . $this->filename);
             }
         }
+
+        // If previews directory doesn't exist, create it
+        // This is only needed because ffmpeg cannot save to a non-existing directory
+        if (!file_exists($this->previewStorageDirPath)) {
+            mkdir($this->previewStorageDirPath);
+        }
+
+        // Generate a preview
+        $preview = $ffmpeg->open($this->getVideoStoragePath(360));
+        $preview
+            ->gif(TimeCode::fromSeconds(0), $preview->getStreams()->videos()->first()->getDimensions(), 10)
+            ->save($this->previewStoragePath);
 
         // Update the processed_at date
         $this->processed_at = now();
