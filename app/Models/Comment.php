@@ -77,6 +77,10 @@ class Comment extends Model
 
     public function getAuthUserRatingAttribute()
     {
+        if (!auth()->check()) {
+            return 'neutral';
+        }
+
         $rating = DB::table('ratings')
             ->where('user_id', auth()->id())
             ->where('comment_id', $this->id)
