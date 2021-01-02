@@ -229,7 +229,7 @@
                         rateType: rateType,
                     });
 
-                    if (response.status === 200 || true) {
+                    if (response.status === 200) {
                         // Set the comment to neutral first
                         switch (comment.rateStatus) {
                             case 'upvote':
