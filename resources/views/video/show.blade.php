@@ -11,7 +11,16 @@
                 </div>
 
                 <h1 class="video-title">{{ $video->title }}</h1>
-                <div class="video-info">{{ $video->viewCount }} views <b>&middot;</b> {{ $video->created_at->format('F d, Y') }}</div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="video-info">
+                            {{ $video->viewCount }} views <b>&middot;</b> {{ $video->created_at->format('F d, Y') }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <video-rating video-key="{{ $video->unique_key }}"></video-rating>
+                    </div>
+                </div>
                 <div class="mt-2">
                     @foreach($video->videoUrls as $res => $url)
                     <button

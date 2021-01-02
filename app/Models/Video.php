@@ -28,6 +28,8 @@ class Video extends Model
 
     protected $appends = [
         'viewCount',
+        'authUserRating',
+        'rating',
 
         // URL
         'thumbnailUrl',
@@ -301,5 +303,57 @@ class Video extends Model
         $this->save();
 
         return $this;
+    }
+
+    public function getRatingAttribute()
+    {
+        $likeCount = DB::table('ratings')
+            ->where('video_id', $this->id)
+            ->where('rate_type', 'like')
+            ->count();
+
+        $dislikeCount = DB::table('ratings')
+            ->where('video_id', $this->id)
+            ->where('rate_type', 'dislike')
+            ->count();
+
+        return [
+            'likes' => $likeCount,
+            'dislikes' => $dislikeCount,
+        ];
+    }
+
+    public function rate($rateType)
+    {
+        // Delete all previous ratings
+        DB::table('ratings')
+            ->where('user_id', auth()->id())
+            ->where('video_id', $this->id)
+            ->delete();
+
+        // Apply new rating
+        if ($rateType !== 'neutral') {
+            DB::table('ratings')->insert([
+                'user_id' => auth()->id(),
+                'video_id' => $this->id,
+                'rate_type' => $rateType,
+                'created_at' => now(),
+            ]);
+        }
+    }
+
+    public function getAuthUserRatingAttribute()
+    {
+        if (!auth()->check()) {
+            return 'neutral';
+        }
+
+        $rating = DB::table('ratings')
+            ->where('user_id', auth()->id())
+            ->where('video_id', $this->id)
+            ->orderByDesc('created_at')
+            ->first();
+
+        return $rating->rate_type ?? 'neutral';
     }
 }

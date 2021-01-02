@@ -82,30 +82,38 @@
 }
 
 .comment-upvote,
-.comment-downvote {
+.comment-downvote,
+.video-like,
+.video-dislike {
     color: grey;
     transition: color 100ms;
     cursor: pointer;
 }
 
 .comment-upvote:hover,
-.comment-downvote:hover {
+.comment-downvote:hover,
+.video-like:hover,
+.video-dislike:hover {
     color: black;
 }
 
-.comment-upvote-active {
+.comment-upvote-active,
+.video-like-active {
     color: #ff4500;
 }
 
-.comment-downvote-active {
+.comment-downvote-active,
+.video-dislike-active {
     color: #6666ff;
 }
 
-.comment-upvote-active:hover {
+.comment-upvote-active:hover,
+.video-like-active:hover {
     color: red;
 }
 
-.comment-downvote-active:hover {
+.comment-downvote-active:hover,
+.video-dislike-active:hover {
     color: blue;
 }
 

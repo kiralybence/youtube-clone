@@ -14,5 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Comments
 Route::resource('video.comments', App\Http\Controllers\Api\CommentController::class)->only(['index', 'store']);
 Route::post('/comments/{comment}/rate', [App\Http\Controllers\Api\CommentController::class, 'rate']);
+
+// Video ratings
+Route::get('/video/{video}', [App\Http\Controllers\Api\VideoController::class, 'show']);
+Route::post('/video/{video}/rate', [App\Http\Controllers\Api\VideoController::class, 'rate']);
