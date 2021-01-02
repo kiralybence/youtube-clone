@@ -44,8 +44,8 @@
                     <div class="col-sm-6 text-right">
                         @if($video->user->id !== auth()->id())
                         <subscribe-button
-                            :channel_id="{{ $video->user->id }}"
-                            :counter-element="'.subscriber-counter'"
+                            channel_id="{{ $video->user->id }}"
+                            counter-element=".subscriber-counter"
                         ></subscribe-button>
                         @endif
                     </div>
@@ -80,9 +80,3 @@
         </div>
     </div>
 @endsection
-<script>
-    import SubscribeButton from "../../js/components/SubscribeButton";
-    export default {
-        components: {SubscribeButton}
-    }
-</script>
