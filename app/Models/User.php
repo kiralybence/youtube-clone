@@ -50,4 +50,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function subscribers()
+    {
+        return $this->belongsToMany(User::class, 'subscriptions', 'channel_id', 'subscriber_id')->withTimestamps();
+    }
+
+    public function subscriptions()
+    {
+        return $this->belongsToMany(User::class, 'subscriptions', 'subscriber_id', 'channel_id')->withTimestamps();
+    }
 }

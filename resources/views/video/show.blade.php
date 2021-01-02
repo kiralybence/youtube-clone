@@ -36,8 +36,21 @@
                     @endforeach
                 </div>
                 <hr>
-                <b>{{ $video->user->name }}</b>
-                <p>{{ $video->description }}</p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <b>{{ $video->user->name }}</b><br>
+                        <span class="text-muted"><span class="subscriber-counter">{{ $video->user->subscribers->count() }}</span> subscribers</span>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        @if($video->user->id !== auth()->id())
+                        <subscribe-button
+                            :channel_id="{{ $video->user->id }}"
+                            :counter-element="'.subscriber-counter'"
+                        ></subscribe-button>
+                        @endif
+                    </div>
+                </div>
+                <p class="mt-3">{{ $video->description }}</p>
                 <hr>
                 <comment-section video-key="{{ $video->unique_key }}"></comment-section>
             </div>
@@ -67,3 +80,9 @@
         </div>
     </div>
 @endsection
+<script>
+    import SubscribeButton from "../../js/components/SubscribeButton";
+    export default {
+        components: {SubscribeButton}
+    }
+</script>

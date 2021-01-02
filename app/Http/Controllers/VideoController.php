@@ -50,7 +50,7 @@ class VideoController extends Controller
     public function show($uniqueKey)
     {
         // Try to find the video by its unique_key
-        $video = Video::with('user')->where('unique_key', $uniqueKey)->first();
+        $video = Video::with(['user', 'user.subscribers'])->where('unique_key', $uniqueKey)->first();
 
         // If there's no such video
         if (empty($video)) {

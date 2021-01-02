@@ -10,6 +10,7 @@ import Vue from 'vue';
 
 Vue.component('comment-section', require('./components/CommentSection.vue').default);
 Vue.component('video-rating', require('./components/VideoRating.vue').default);
+Vue.component('subscribe-button', require('./components/SubscribeButton.vue').default);
 
 const app = new Vue({
     el: '#app',

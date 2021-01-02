@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Video;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $videos = Video::with('user')->orderByDesc('created_at')->limit(8)->get();
+        $latestGlobal = Video::with('user')->orderByDesc('created_at')->limit(8)->get();
+        $latestSub = Video::with('user')->whereHas('user.subscribers', function(Builder $query) {
+            $query->where('id', auth()->id());
+        })->orderByDesc('created_at')->limit(8)->get();
 
         return view('home', [
-            'videos' => $videos,
+            'latestGlobal' => $latestGlobal,
+            'latestSub' => $latestSub,
         ]);
     }
 

@@ -16,7 +16,7 @@ It includes features such as:
     - Upvotes, downvotes
     - Replies
 - Like/Dislike
-- Subscribing (TODO)
+- Subscribing
 
 ## Installation
 
