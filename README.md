@@ -1,32 +1,34 @@
 # YouTube clone
 
-This is a minimalistic clone of YouTube made with Laravel.
+This is a minimalistic clone of YouTube created with Laravel.
 
-It includes features such as:
+## Main features
 
 - Video uploading
     - Automatic thumbnail generation
-    - Multiple quality options
     - Custom thumbnails (TODO)
     - Public/Unlisted/Private visibility (TODO)
-    - Preview GIF
+- Video preview on hover
+- Multiple playback quality options
 - Search
-- View count
+- View count (with spam detection)
 - Comments
-    - Upvotes, downvotes
+    - Upvote/Downvote
     - Replies
 - Like/Dislike
 - Subscribing
 
-## Prerequisites
+## Setup
 
-This project is heavily based on FFmpeg, so make sure you have a working [FFmpeg](https://ffmpeg.org/) installation (a portable one works too).
+### Prerequisites
 
-You'll also need [Composer](https://getcomposer.org/) and [npm](https://www.npmjs.com/) to install the packages.
+- PHP 7.3 (or higher)
+- MySQL 5.7 (or higher)
+- [Composer](https://getcomposer.org/)
+- [npm](https://www.npmjs.com/)
+- [FFmpeg](https://ffmpeg.org/)
 
-And of course... [PHP](https://www.php.net/) (7.3+), with a database that's supported by Laravel 8.
-
-## Installation
+### Installation (for development)
 
 Since this is Laravel, just follow the regular Laravel installation guide.
 
@@ -41,11 +43,17 @@ npm install
 npm run dev
 ```
 
-- Create your `.env` file (based on `.env.example`). Don't forget to include the path to `ffmpeg` and `ffprobe` binaries.
+- Create (and fill out) your `.env` file
+```bash
+cp .env.example .env
+```
 
 - Run the database migrations
 ```bash
 php artisan migrate
 ```
 
-- Start your web server (or run `php artisan serve`)
+- Serve your application
+```bash
+php artisan serve
+```
