@@ -12,6 +12,7 @@ class Comment extends Model
     use HasFactory;
     use SoftDeletes;
 
+    // TODO: remove all fillables, because we're not using create or update methods anymore
     protected $fillable = [
         'content',
     ];
@@ -31,11 +32,13 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+    // TODO: rename to "parent()"
     public function comment()
     {
         return $this->belongsTo(Comment::class);
     }
 
+    // TODO: rename to "replies()"
     public function comments()
     {
         return $this->hasMany(Comment::class);

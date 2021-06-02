@@ -177,6 +177,7 @@
                 try {
                     const response = await axios.get(`/api/video/${this.videoKey}/comments`);
 
+                    // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                     if (response.status === 200) {
                         this.comments = response.data;
 
@@ -207,6 +208,7 @@
 
                     const response = await axios.post(`/api/video/${this.videoKey}/comments`, data);
 
+                    // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                     if (response.status === 201) {
                         if (!isReply) {
                             this.comments.unshift(this.createCommentFromResponse(response.data));
@@ -229,6 +231,7 @@
                         rateType: rateType,
                     });
 
+                    // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                     if (response.status === 200) {
                         // Set the comment to neutral first
                         switch (comment.rateStatus) {

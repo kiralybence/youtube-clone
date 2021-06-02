@@ -18,6 +18,7 @@ class Video extends Model
 {
     use HasFactory;
 
+    // TODO: remove all fillables, because we're not using create or update methods anymore
     protected $fillable = [
         'title',
         'description',
@@ -35,6 +36,8 @@ class Video extends Model
         'thumbnailUrl',
         'videoUrls',
         'previewUrl',
+
+        // TODO: don't expose paths to frontend
 
         // Dir path
         'videoStorageDirPath',
@@ -197,6 +200,8 @@ class Video extends Model
 
         return $paths;
     }
+
+    // TODO: are all these paths really necessary?
 
     public function getVideoStoragePath($res = 'source')
     {

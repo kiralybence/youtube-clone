@@ -16,6 +16,8 @@ class User extends Authenticatable
      *
      * @var array
      */
+    // TODO: remove all fillables, because we're not using create or update methods anymore
+    // TODO: what about the built-in Auth controllers though? there is a User::create()
     protected $fillable = [
         'name',
         'email',

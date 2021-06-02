@@ -24,6 +24,7 @@ export default {
             try {
                 const response = await axios.get(`/api/users/${this.channel_id}/substatus`);
 
+                // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                 if (response.status === 200) {
                     this.status = response.data.status;
                 }
@@ -35,6 +36,7 @@ export default {
             try {
                 const response = await axios.post(`/api/users/${this.channel_id}/subscribe`);
 
+                // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                 if (response.status === 200) {
                     this.status = true;
 
@@ -56,6 +58,7 @@ export default {
             try {
                 const response = await axios.post(`/api/users/${this.channel_id}/unsubscribe`);
 
+                // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                 if (response.status === 200) {
                     this.status = false;
 

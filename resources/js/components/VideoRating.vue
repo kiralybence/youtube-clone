@@ -53,6 +53,7 @@ export default {
             try {
                 const response = await axios.get(`/api/video/${this.videoKey}`);
 
+                // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                 if (response.status === 200) {
                     this.rating.status = response.data.authUserRating;
                     this.rating.likes = response.data.rating.likes;
@@ -68,6 +69,7 @@ export default {
                     rateType: rateType,
                 });
 
+                // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
                 if (response.status === 200) {
                     // Set the comment to neutral first
                     switch (this.rating.status) {

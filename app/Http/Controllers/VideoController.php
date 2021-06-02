@@ -36,12 +36,15 @@ class VideoController extends Controller
         $request->video->storeAs('videos', 'source_'.$filename, 'public');
 
         // Save the video entry to the database
+        // TODO: use "new Video()" instead of create
         auth()->user()->videos()->create([
             'title' => $request->title,
             'description' => $request->description,
             'unique_key' => $uniqueKey,
             'filename' => $filename,
         ]);
+
+        // TODO: create a job for processing the video
 
         // Redirect the user to the video's page
         return redirect()->route('video.show', ['video' => $uniqueKey]);
@@ -50,6 +53,7 @@ class VideoController extends Controller
     public function show($uniqueKey)
     {
         // Try to find the video by its unique_key
+        // TODO: use a findByUniqueKey() method
         $video = Video::with(['user', 'user.subscribers'])->where('unique_key', $uniqueKey)->first();
 
         // If there's no such video
