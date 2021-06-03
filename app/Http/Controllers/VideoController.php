@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
-use FFMpeg\FFMpeg;
-use FFMpeg\Coordinate\TimeCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 
 class VideoController extends Controller
 {
