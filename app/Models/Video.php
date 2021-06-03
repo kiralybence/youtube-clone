@@ -361,4 +361,11 @@ class Video extends Model
 
         return $rating->rate_type ?? 'neutral';
     }
+
+    public static function findByUniqueKey($uniqueKey)
+    {
+        return Video::query()
+            ->where('unique_key', $uniqueKey)
+            ->first();
+    }
 }

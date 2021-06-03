@@ -11,8 +11,12 @@ class CommentController extends Controller
 {
     public function index(Request $request, $videoKey)
     {
-        // TODO: use a findByUniqueKey() method
-        $video = Video::where('unique_key', $videoKey)->firstOrfail();
+        $video = Video::findByUniqueKey($videoKey);
+
+        if (empty($video)) {
+            return response()->json(NULL, 404);
+        }
+
         $comments = $video->comments()
             ->with(['user', 'comments', 'comments.user'])
             ->whereNull('comment_id')
@@ -25,8 +29,11 @@ class CommentController extends Controller
 
     public function store(Request $request, $videoKey)
     {
-        // TODO: use a findByUniqueKey() method
-        $video = Video::where('unique_key', $videoKey)->firstOrfail();
+        $video = Video::findByUniqueKey($videoKey);
+
+        if (empty($video)) {
+            return response()->json(NULL, 404);
+        }
 
         // TODO: validate (+ check if parent belongs to the same video)
 

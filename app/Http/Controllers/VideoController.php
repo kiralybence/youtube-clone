@@ -54,14 +54,18 @@ class VideoController extends Controller
     public function show($uniqueKey)
     {
         // Try to find the video by its unique_key
-        // TODO: use a findByUniqueKey() method
-        $video = Video::with(['user', 'user.subscribers'])->where('unique_key', $uniqueKey)->first();
+        $video = Video::findByUniqueKey($uniqueKey);
 
         // If there's no such video
         if (empty($video)) {
             // Redirect to 404 page
             abort(404);
         }
+
+        $video->load([
+            'user',
+            'user.subscribers'
+        ]);
 
         // Increment the video's viewcount
         $video->incrementViewCount();

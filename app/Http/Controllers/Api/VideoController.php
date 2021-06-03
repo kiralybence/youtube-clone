@@ -10,16 +10,23 @@ class VideoController extends Controller
 {
     public function show($videoKey)
     {
-        // TODO: use a findByUniqueKey() method
-        $video = Video::where('unique_key', $videoKey)->firstOrfail();
+        $video = Video::findByUniqueKey($videoKey);
+
+        if (empty($video)) {
+            return response()->json(NULL, 404);
+        }
+
         // TODO: don't return unnecessary information
         return response()->json($video);
     }
 
     public function rate(Request $request, $videoKey)
     {
-        // TODO: use a findByUniqueKey() method
-        $video = Video::where('unique_key', $videoKey)->firstOrfail();
+        $video = Video::findByUniqueKey($videoKey);
+
+        if (empty($video)) {
+            return response()->json(NULL, 404);
+        }
 
         // TODO: validate
 
