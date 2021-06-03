@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Video;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class VideoController extends Controller
 {
@@ -24,8 +23,7 @@ class VideoController extends Controller
         }
 
         // Generate a unique key
-        // TODO: make key generation truly unique (by checking DB for existing key)
-        $uniqueKey = Str::random(16);
+        $uniqueKey = Video::generateUniqueKey();
 
         // Use the unique key as the video's filename
         $filename = $uniqueKey . '.' . $request->video->getClientOriginalExtension();

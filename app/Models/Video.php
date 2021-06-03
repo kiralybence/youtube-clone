@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
 class Video extends Model
@@ -367,5 +368,14 @@ class Video extends Model
         return Video::query()
             ->where('unique_key', $uniqueKey)
             ->first();
+    }
+
+    public static function generateUniqueKey()
+    {
+        do {
+            $uniqueKey = Str::random(16);
+        } while (!empty(Video::findByUniqueKey($uniqueKey)));
+
+        return $uniqueKey;
     }
 }
