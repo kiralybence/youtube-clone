@@ -52,8 +52,9 @@ class CommentController extends Controller
 
         $comment->save();
 
-        // TODO: use ->load()
-        $comment->comments;
+        $comment->load([
+            'comments',
+        ]);
 
         return response()->json($comment, 201);
     }
