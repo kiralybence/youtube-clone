@@ -10,14 +10,9 @@ class UserController extends Controller
 {
     public function subStatus(User $user)
     {
-        if (!auth()->check()) {
-            // TODO: don't duplicate code, just set $status to false and put the other checking in an else statment
-            return response()->json(['status' => false]);
-        }
-
-        $status = $user->subscribers->contains(auth()->user());
-
-        return response()->json(['status' => $status]);
+        return response()->json([
+            'status' => auth()->check() && $user->subscribers->contains(auth()->user())
+        ]);
     }
 
     public function subscribe(User $user)
