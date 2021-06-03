@@ -38,6 +38,7 @@ class VideoController extends Controller
         $video->unique_key = $uniqueKey;
         $video->filename = $filename;
         $video->user()->associate(auth()->user());
+        $video->save();
 
         // TODO: create a job for processing the video
 
