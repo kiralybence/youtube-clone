@@ -12,11 +12,6 @@ class Comment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    // TODO: remove all fillables, because we're not using create or update methods anymore
-    protected $fillable = [
-        'content',
-    ];
-
     protected $appends = [
         'authUserRating',
         'points',

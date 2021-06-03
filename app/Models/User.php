@@ -12,19 +12,6 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    // TODO: remove all fillables, because we're not using create or update methods anymore
-    // TODO: what about the built-in Auth controllers though? there is a User::create()
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array

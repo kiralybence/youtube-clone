@@ -19,15 +19,6 @@ class Video extends Model
 {
     use HasFactory;
 
-    // TODO: remove all fillables, because we're not using create or update methods anymore
-    protected $fillable = [
-        'title',
-        'description',
-        'unique_key',
-        'filename',
-        'processed_at',
-    ];
-
     protected $appends = [
         'viewCount',
         'authUserRating',
