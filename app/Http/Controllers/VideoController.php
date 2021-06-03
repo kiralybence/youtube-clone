@@ -27,6 +27,7 @@ class VideoController extends Controller
         }
 
         // Generate a unique key
+        // TODO: make key generation truly unique (by checking DB for existing key)
         $uniqueKey = Str::random(16);
 
         // Use the unique key as the video's filename
