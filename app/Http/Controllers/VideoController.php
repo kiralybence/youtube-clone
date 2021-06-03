@@ -34,13 +34,12 @@ class VideoController extends Controller
         $request->video->storeAs('videos', 'source_'.$filename, 'public');
 
         // Save the video entry to the database
-        // TODO: use "new Video()" instead of create
-        auth()->user()->videos()->create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'unique_key' => $uniqueKey,
-            'filename' => $filename,
-        ]);
+        $video = new Video();
+        $video->title = $request->title;
+        $video->description = $request->description;
+        $video->unique_key = $uniqueKey;
+        $video->filename = $filename;
+        $video->user()->associate(auth()->user());
 
         // TODO: create a job for processing the video
 
