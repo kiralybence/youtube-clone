@@ -53,12 +53,9 @@ export default {
             try {
                 const response = await axios.get(`/api/video/${this.videoKey}`);
 
-                // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
-                if (response.status === 200) {
-                    this.rating.status = response.data.authUserRating;
-                    this.rating.likes = response.data.rating.likes;
-                    this.rating.dislikes = response.data.rating.dislikes;
-                }
+                this.rating.status = response.data.authUserRating;
+                this.rating.likes = response.data.rating.likes;
+                this.rating.dislikes = response.data.rating.dislikes;
             } catch (err) {
                 console.error(err);
             }
@@ -69,38 +66,35 @@ export default {
                     rateType: rateType,
                 });
 
-                // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
-                if (response.status === 200) {
-                    // Set the comment to neutral first
-                    switch (this.rating.status) {
-                        case 'like':
-                            this.rating.likes--;
-                            break;
+                // Set the comment to neutral first
+                switch (this.rating.status) {
+                    case 'like':
+                        this.rating.likes--;
+                        break;
 
-                        case 'dislike':
-                            this.rating.dislikes--;
-                            break;
+                    case 'dislike':
+                        this.rating.dislikes--;
+                        break;
 
-                        default:
-                            break;
-                    }
-                    this.rating.status = 'neutral';
+                    default:
+                        break;
+                }
+                this.rating.status = 'neutral';
 
-                    // And then apply the new rating
-                    switch (rateType) {
-                        case 'like':
-                            this.rating.status = 'like';
-                            this.rating.likes++;
-                            break;
+                // And then apply the new rating
+                switch (rateType) {
+                    case 'like':
+                        this.rating.status = 'like';
+                        this.rating.likes++;
+                        break;
 
-                        case 'dislike':
-                            this.rating.status = 'dislike';
-                            this.rating.dislikes++;
-                            break;
+                    case 'dislike':
+                        this.rating.status = 'dislike';
+                        this.rating.dislikes++;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
             } catch (err) {
                 console.error(err);

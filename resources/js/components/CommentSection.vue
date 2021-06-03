@@ -177,15 +177,12 @@
                 try {
                     const response = await axios.get(`/api/video/${this.videoKey}/comments`);
 
-                    // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
-                    if (response.status === 200) {
-                        this.comments = response.data;
+                    this.comments = response.data;
 
-                        this.comments = [];
-                        response.data.forEach(comment => {
-                            this.comments.push(this.createCommentFromResponse(comment));
-                        });
-                    }
+                    this.comments = [];
+                    response.data.forEach(comment => {
+                        this.comments.push(this.createCommentFromResponse(comment));
+                    });
                 } catch (err) {
                     console.error(err);
                 }
@@ -208,18 +205,15 @@
 
                     const response = await axios.post(`/api/video/${this.videoKey}/comments`, data);
 
-                    // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
-                    if (response.status === 201) {
-                        if (!isReply) {
-                            this.comments.unshift(this.createCommentFromResponse(response.data));
+                    if (!isReply) {
+                        this.comments.unshift(this.createCommentFromResponse(response.data));
 
-                            this.newCommentDraft = '';
-                        } else {
-                            parent.replies.push(response.data);
+                        this.newCommentDraft = '';
+                    } else {
+                        parent.replies.push(response.data);
 
-                            parent.reply.isOpen = false;
-                            parent.reply.draft = '';
-                        }
+                        parent.reply.isOpen = false;
+                        parent.reply.draft = '';
                     }
                 } catch (err) {
                     console.error(err);
@@ -231,38 +225,35 @@
                         rateType: rateType,
                     });
 
-                    // TODO: remove response checking, axios will throw an exception if request wasn't successful anyway
-                    if (response.status === 200) {
-                        // Set the comment to neutral first
-                        switch (comment.rateStatus) {
-                            case 'upvote':
-                                comment.points--;
-                                break;
+                    // Set the comment to neutral first
+                    switch (comment.rateStatus) {
+                        case 'upvote':
+                            comment.points--;
+                            break;
 
-                            case 'downvote':
-                                comment.points++;
-                                break;
+                        case 'downvote':
+                            comment.points++;
+                            break;
 
-                            default:
-                                break;
-                        }
-                        comment.rateStatus = 'neutral';
+                        default:
+                            break;
+                    }
+                    comment.rateStatus = 'neutral';
 
-                        // And then apply the new rating
-                        switch (rateType) {
-                            case 'upvote':
-                                comment.rateStatus = 'upvote';
-                                comment.points++;
-                                break;
+                    // And then apply the new rating
+                    switch (rateType) {
+                        case 'upvote':
+                            comment.rateStatus = 'upvote';
+                            comment.points++;
+                            break;
 
-                            case 'downvote':
-                                comment.rateStatus = 'downvote';
-                                comment.points--;
-                                break;
+                        case 'downvote':
+                            comment.rateStatus = 'downvote';
+                            comment.points--;
+                            break;
 
-                            default:
-                                break;
-                        }
+                        default:
+                            break;
                     }
                 } catch (err) {
                     console.error(err);
