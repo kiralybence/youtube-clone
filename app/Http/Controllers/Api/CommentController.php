@@ -37,11 +37,8 @@ class CommentController extends Controller
 
         // TODO: validate (+ check if parent belongs to the same video)
 
-        $comment = new Comment([
-            // TODO: use $comment->content instead
-            'content' => $request->get('content'),
-        ]);
-
+        $comment = new Comment();
+        $comment->content = $request->get('content');
         $comment->video()->associate($video);
         $comment->user()->associate(auth()->user());
 
@@ -52,6 +49,9 @@ class CommentController extends Controller
 
         $comment->save();
 
+        // TODO: is this relationship loading necessary here?
+        //       there should be no replies, because we have just created the comment
+        //       maybe i left it here, because Vue.js would run into an error if the property isn't set
         $comment->load([
             'comments',
         ]);
